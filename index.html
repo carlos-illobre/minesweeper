@@ -5,9 +5,25 @@
 <title>Mine Sweeper</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
+<script src="minesweeper.js"></script>
+<style>
+td {
+    width: 25px;
+    height: 25px;
+    border-style: solid;
+    border-width: thin;
+    text-align: center;
+}
+td button {
+    width: 100%;
+    padding: 0;
+    font-weight: bolder;
+}
+</style>
 </head>
 <body>
-<main>
+<main ng-app="minesweeper">
     <section>
         <form>
             <label for="username">Username: </label>
@@ -40,22 +56,6 @@
             </li>
         </ol>
     </section>
-    <style>
-    td {
-        width: 25px;
-        height: 25px;
-        border-style: solid;
-        border-width: thin;
-        text-align: center;
-    }
-
-    td button {
-        width: 100%;
-        padding: 0;
-        font-weight: bolder;
-    }
-
-    </style>
     <section>
         <table id="board">
             <tbody>
