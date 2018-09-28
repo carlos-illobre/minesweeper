@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mine Sweeper</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<main>
+    <section>
+        <form>
+            <label for="username">Username: </label>
+            <input id="username" type="text" placeholder="Enter your username" />
+            <button>Login</button>
+        </form>
+    </section>
+    <section>
+        <h3>New Game</h3>
+        <form>
+            <label for="username">Rows: </label>
+            <input type="number" min="10" max="500" />
+            <label for="username">Columns: </label>
+            <input type="number" min="10" max="500" />
+            <label for="username">Mines: </label>
+            <input type="number" min="10" max="100" />
+            <button>Start!</button>
+        </form>
+    </section>
+    <section>
+        <h3>Games</h3>
+        <ol>
+            <li>
+                <span>2018/09/21 10:10:10pm</span>
+                <button>Resume</button>
+            </li>
+            <li>
+                <span>2018/09/21 10:10:10pm</span>
+                <button>Resume</button>
+            </li>
+        </ol>
+    </section>
+    <style>
+    td {
+        width: 25px;
+        height: 25px;
+        border-style: solid;
+        border-width: thin;
+        text-align: center;
+    }
+
+    td button {
+        width: 100%;
+        padding: 0;
+        font-weight: bolder;
+    }
+
+    </style>
+    <section>
+        <table id="board">
+            <tbody>
+                <tr>
+                    <td>
+                        <i class="glyphicon glyphicon-certificate"></i>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon glyphicon-flag"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <span>1</span>
+                    </td>
+                    <td>
+                        <span>1</span>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon">?</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <span>4</span>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <span class="discovered"></span>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button>
+                            <i class="glyphicon"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <span id="timer"></span>
+        <button>Preserve</button>
+    </section>
+</main>
+<script>
+$( "#board" ).contextmenu(function() {
+  console.log( "Handler for .contextmenu() called." );
+return false
+});
+
+setInterval(function() {
+    document.getElementById("timer").innerHTML = new Date().toISOString();
+}, 1000)
+</script>
+</body>
+</html>
