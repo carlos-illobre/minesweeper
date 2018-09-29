@@ -7,6 +7,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.min.js"></script>
 <script src="minesweeper.js"></script>
+<script src="controllers/UserController.js"></script>
+<script src="services/userService.js"></script>
+<script src="services/boardService.js"></script>
 <style>
 td {
     width: 25px;
@@ -23,171 +26,60 @@ td button {
 </style>
 </head>
 <body>
-<main ng-app="minesweeper">
+<main ng-app="minesweeper" ng-controller="UserController as c">
     <section>
-        <form>
+        <form novalidate onsubmit="return false" ng-submit="c.login()">
             <label for="username">Username: </label>
-            <input id="username" type="text" placeholder="Enter your username" />
-            <button>Login</button>
+            <input name="username"
+                   type="text" 
+                   placeholder="Enter your username"
+                   ng-model="c.username"
+            />
+            <button type="submit">Login</button>
         </form>
     </section>
-    <section>
-        <h3>New Game</h3>
-        <form>
-            <label for="username">Rows: </label>
-            <input type="number" min="10" max="500" />
-            <label for="username">Columns: </label>
-            <input type="number" min="10" max="500" />
-            <label for="username">Mines: </label>
-            <input type="number" min="10" max="100" />
-            <button>Start!</button>
+    <section ng-show="c.logged">
+        <h3>New Board</h3>
+        <form name="board" novalidate onsubmit="return false" ng-submit="c.createBoard()">
+            <label for="rows">Rows: </label>
+            <input name="rows" type="number" min="1" max="100" ng-model="c.rows" required />
+            <span class="error" ng-show="board.rows.$error.number">Rows is not a valid number</span>
+            <label for="columns">Columns: </label>
+            <input name="columns" type="number" min="1" max="100" ng-model="c.columns" required />
+            <span class="error" ng-show="board.columns.$error.number">Columns is not a valid number</span>
+            <label for="mines">Mines: </label>
+            <input name="mines" type="number" min="1" max="100" ng-model="c.mines" required />
+            <span class="error" ng-show="board.mines.$error.number">Mines is not a valid number</span>
+            <button type="submit">Start!</button>
         </form>
     </section>
-    <section>
-        <h3>Games</h3>
+    <section ng-show="c.boards.length">
+        <h3>Boards</h3>
         <ol>
-            <li>
-                <span>2018/09/21 10:10:10pm</span>
-                <button>Resume</button>
-            </li>
-            <li>
-                <span>2018/09/21 10:10:10pm</span>
-                <button>Resume</button>
+            <li ng-repeat="board in c.boards">
+                <form novalidate onsubmit="return false" ng-submit="c.resumeBoard(board)">
+                    <span>{{board.started | date:'yyyy-MM-dd hh:mm:ssa'}}</span>
+                    <button type="submit">Resume</button>
+                </form>
             </li>
         </ol>
     </section>
-    <section>
-        <table id="board">
-            <tbody>
-                <tr>
-                    <td>
-                        <i class="glyphicon glyphicon-certificate"></i>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon glyphicon-flag"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <span>1</span>
-                    </td>
-                    <td>
-                        <span>1</span>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon">?</i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <span>4</span>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <span class="discovered"></span>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button>
-                            <i class="glyphicon"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <span id="timer"></span>
-        <button>Preserve</button>
+    <section ng-show="c.board">
+        <form novalidate onsubmit="return false" ng-submit="c.preserveBoard()">
+            <table id="board">
+                <tbody>
+                    <tr ng-repeat="rows in c.board.cells track by $index">
+                        <td ng-repeat="cell in rows track by $index">
+                            <button type="button">
+                                <i class="glyphicon">{{cell}}</i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <span id="timer"></span>
+            <button type="submit">Preserve</button>
+        </form>
     </section>
 </main>
 <script>
@@ -202,3 +94,22 @@ setInterval(function() {
 </script>
 </body>
 </html>
+                        <!--td ng-repeat="cell in rows">
+                            <i class="glyphicon glyphicon-certificate"></i>
+                        </td>
+                        <td>
+                            <button type="button">
+                                <i class="glyphicon glyphicon-flag"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <span>1</span>
+                        </td>
+                        <td>
+                            <span>1</span>
+                        </td>
+                        <td>
+                            <button>
+                                <i class="glyphicon">?</i>
+                            </button>
+                        </td-->
