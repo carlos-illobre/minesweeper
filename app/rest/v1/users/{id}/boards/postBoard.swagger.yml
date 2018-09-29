@@ -1,0 +1,6 @@
+/v1/users/{username}/boards:
+    post:
+        tags:
+            - board
+        summary: Adds a new board to a user
+        description: Adds a new board to a user. If the user does not exist then also creates the user
