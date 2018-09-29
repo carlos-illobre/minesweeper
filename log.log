@@ -1,0 +1,17 @@
+2018-09-29T17:38:41.077Z - error: uncaughtException: Cannot find module './app/createExpressApp.js' date=Sat Sep 29 2018 14:38:41 GMT-0300 (-03), pid=7986, uid=1000, gid=1000, cwd=/home/xxx/minesweeper, execPath=/usr/bin/node, version=v8.9.0, argv=[/usr/bin/node, /home/xxx/minesweeper/server.js], rss=49909760, heapTotal=31301632, heapUsed=16336824, external=18594679, loadavg=[2.421875, 1.38623046875, 0.6494140625], uptime=6946
+Error: Cannot find module './app/createExpressApp.js'
+    at Function.Module._resolveFilename (module.js:536:15)
+    at Function.Module._load (module.js:466:25)
+    at Module.require (module.js:579:17)
+    at require (internal/module.js:11:18)
+    at Object.<anonymous> (/home/xxx/minesweeper/server.js:5:13)
+    at Module._compile (module.js:635:30)
+    at Object.Module._extensions..js (module.js:646:10)
+    at Module.load (module.js:554:32)
+    at tryModuleLoad (module.js:497:12)
+    at Function.Module._load (module.js:489:3)
+    at Function.Module.runMain (module.js:676:10)
+    at startup (bootstrap_node.js:187:16)
+    at bootstrap_node.js:608:3
+2018-09-29T17:40:20.413Z - info: Listening on port 8080
+2018-09-29T17:40:21.909Z - info: MongoDB connected at mongodb://educacionit:educacionit@ds231739.mlab.com:31739/educacionit

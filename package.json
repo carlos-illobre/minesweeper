@@ -1,0 +1,58 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "description": "Deviget API test",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "eslint --fix . && jest --coverage",
+    "test:debug": "node debug ./node_modules/jest/bin/jest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlos-illobre/minesweeper.git"
+  },
+  "keywords": [
+    "nodejs",
+    "rest"
+  ],
+  "author": "Carlos Illobre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carlos-illobre/minesweeper/issues"
+  },
+  "homepage": "https://github.com/carlos-illobre/minesweeper#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-winston": "^2.5.0",
+    "glob": "^7.1.2",
+    "mongojs": "^2.5.0",
+    "mongoose": "^5.0.12",
+    "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.6.0",
+    "eslint-plugin-jest": "^21.22.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "jest": "^23.6.0"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+      "api/**/*.js",
+      "database/**/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "forceCoverageMatch": [
+      "**/*.test.js"
+    ]
+  }
+}
