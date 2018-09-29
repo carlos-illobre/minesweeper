@@ -1,0 +1,12 @@
+td {
+    width: 25px;
+    height: 25px;
+    border-style: solid;
+    border-width: thin;
+    text-align: center;
+}
+td button {
+    width: 100%;
+    padding: 0;
+    font-weight: bolder;
+}
