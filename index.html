@@ -72,16 +72,10 @@
                     </tr>
                 </tbody>
             </table>
-            <span id="timer"></span>
+            <span>{{c.timer | date:'yyyy-MM-dd hh:mm:ssa'}}</span>
             <button type="submit">Preserve</button>
         </form>
     </section>
 </main>
-<script>
-
-setInterval(function() {
-    document.getElementById("timer").innerHTML = new Date().toISOString();
-}, 1000)
-</script>
 </body>
 </html>

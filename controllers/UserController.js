@@ -8,17 +8,30 @@ angular.module('minesweeper')
 
     this.createBoard = function() {
         this.board = boardService.createBoard(this.logged, this.rows, this.columns, this.mines)
+        var that = this
+        this.interval = setInterval(function() {
+            $scope.$apply(function () {
+                that.timer = new Date()
+            })
+        }, 1000)
     }
 
     this.preserveBoard = function() {
         boardService.preserveBoard(this.board)
         this.boards = boardService.getBoards(this.logged)
         this.board = null
+        clearInterval(this.interval) 
     }
 
     this.resumeBoard = function(board) {
         this.boards.splice(this.boards.indexOf(board), 1)
         this.board = board
+        var that = this
+        this.interval = setInterval(function() {
+            $scope.$apply(function () {
+                that.timer = new Date()
+            })
+        }, 1000)
     }
 
     this.markCell = function(row, column) {
