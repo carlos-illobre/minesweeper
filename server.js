@@ -1,6 +1,6 @@
 const port = process.env.PORT || 8080
 
-const logger = require('./logger.js')
+const logger = require('./createLogger.js')()
 const database = require('./database/createDatabase.js')({ logger })
 const app = require('./app/createExpressApp.js')({ logger, database })
 const server = require('http').createServer()
@@ -28,3 +28,5 @@ server
     }
 })
 .listen(port)
+
+module.exports = server
