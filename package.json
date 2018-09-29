@@ -29,6 +29,8 @@
     "glob": "^7.1.2",
     "mongojs": "^2.5.0",
     "mongoose": "^5.0.12",
+    "swagger-jsdoc": "^1.9.7",
+    "swagger-ui-express": "^2.0.9",
     "winston": "^2.4.1"
   },
   "devDependencies": {
