@@ -3,5 +3,4 @@
 # Ignore built files except build/index.js
 .git/
 coverage/
-**/node_modules/
-
+public/

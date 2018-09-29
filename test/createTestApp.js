@@ -3,6 +3,7 @@ const createExpressApp = require('../app/createExpressApp.js')
 const createLogger = require('../createLogger.js')
 const mongoose = require('mongoose')
 const { Mockgoose } = require('mockgoose')
+const supertest = require('supertest')
 
 require('events').EventEmitter.defaultMaxListeners = 0
 
@@ -28,12 +29,9 @@ module.exports = async useLogger => {
 
     reset()
 
-    const app = createExpressApp({ logger, database })
+    const testApp = supertest(createExpressApp({ logger, database }))
+    testApp.db = database
 
-    return {
-        db: database,
-        app,
-        reset,
-    }
+    return testApp
 
 }

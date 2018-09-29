@@ -7,7 +7,7 @@ module.exports = ({
 }) => {
 
     const url = process.env.MONGODB_URL
-        || 'mongodb://educacionit:educacionit@ds231739.mlab.com:31739/educacionit'
+           || 'mongodb://educacionit:educacionit@ds231739.mlab.com:31739/educacionit'
     
     mongoose.set('debug', (coll, method, query, doc, options = {}) => {
         logger.info(`${coll},${method},${JSON.stringify(query)},${JSON.stringify(options)}`)

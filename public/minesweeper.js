@@ -1,1 +1,1 @@
-angular.module('minesweeper', [])
+angular.module('minesweeper', []);

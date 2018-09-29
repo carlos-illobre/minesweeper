@@ -1,4 +1,4 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerJSDoc = require('swagger-jsdoc')
 
 module.exports = () => {
     return swaggerJSDoc({
@@ -10,5 +10,5 @@ module.exports = () => {
             basePath: '/api',
         },
         apis: ['./app/api/**/*.yml'],
-    });
-};
+    })
+}

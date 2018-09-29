@@ -17,14 +17,14 @@ server
     const addr = this.address() || { port }
     const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
     switch (error.code) {
-        case 'EACCES':
-            logger.error(`${bind} requires elevated privileges`)
-            process.exit(1)
-        case 'EADDRINUSE':
-            logger.error(`${bind} is already in use`)
-            process.exit(1)
-        default:
-            throw error
+    case 'EACCES':
+        logger.error(`${bind} requires elevated privileges`)
+        return process.exit(1)
+    case 'EADDRINUSE':
+        logger.error(`${bind} is already in use`)
+        return process.exit(1)
+    default:
+        throw error
     }
 })
 .listen(port)

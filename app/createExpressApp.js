@@ -2,8 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const expressWinston = require('express-winston')
 const apiRouter = require('./rest/createApiRouter.js')()
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./getSwaggerDocument.js')();
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('./getSwaggerDocument.js')()
 
 module.exports = ({ database, logger }) => express()
 .use(expressWinston.logger({
@@ -24,5 +24,5 @@ module.exports = ({ database, logger }) => express()
 .use('/rest', apiRouter)
 .use((error, req, res, next) => {
     logger.error(error, error)
-    res.status(error.status || 500).json({ error })
+    res.status(error.status).send(error.message)
 })

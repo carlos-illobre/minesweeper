@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "eslint --fix . && jest --coverage",
+    "test": "eslint --fix . && jest --coverage --forceExit",
     "test:debug": "node debug ./node_modules/jest/bin/jest.js",
     "nodemon": "nodemon -e js,json,yml"
   },
@@ -27,6 +27,7 @@
     "express": "^4.16.3",
     "express-winston": "^2.5.1",
     "glob": "^7.1.2",
+    "lodash": "^4.17.11",
     "mongojs": "^2.5.0",
     "mongoose": "^5.0.12",
     "swagger-jsdoc": "^1.9.7",
@@ -39,12 +40,14 @@
     "eslint-plugin-jest": "^21.22.0",
     "eslint-plugin-promise": "^4.0.1",
     "jest": "^23.6.0",
-    "nodemon": "^1.18.4"
+    "mockgoose": "^7.3.5",
+    "nodemon": "^1.18.4",
+    "supertest": "^3.3.0"
   },
   "jest": {
     "verbose": true,
     "collectCoverageFrom": [
-      "api/**/*.js",
+      "app/**/*.js",
       "database/**/*.js"
     ],
     "coverageThreshold": {

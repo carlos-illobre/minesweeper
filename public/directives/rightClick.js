@@ -7,9 +7,9 @@ angular.module('minesweeper')
         },
         link: function(scope, element, attributes, controller) {
             element.contextmenu(function() {
-                scope.rightClick()
-                return false
+                scope.rightClick();
+                return false;
             });
         },
-    }
-})
+    };
+});
