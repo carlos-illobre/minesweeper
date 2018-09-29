@@ -7,7 +7,7 @@ module.exports = () => {
                 title: 'Api Documentation',
                 version: '1.0.0',
             },
-            basePath: '/app',
+            basePath: '/rest',
         },
         apis: ['./app/rest/**/*.yml'],
     })

@@ -4,3 +4,31 @@
             - board
         summary: Adds a new board to a user
         description: Adds a new board to a user. If the user does not exist then also creates the user
+        consumes:
+            - application/x-www-form-urlencoded
+        parameters:
+        -   name: username
+            in: path
+            required: true
+            type: string
+            example: some user
+        -   name: rows
+            in: formData
+            required: true
+            type: number
+            example: 3
+        -   name: columns
+            in: formData
+            required: true
+            type: number
+            example: 3
+        -   name: mines
+            in: formData
+            required: true
+            type: number
+            example: 3
+        responses:
+            201:
+                description: Created
+            400:
+                description: Invalid data

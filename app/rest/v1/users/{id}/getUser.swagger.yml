@@ -6,6 +6,12 @@
         description: Get a user with all his preserved boards
         produces:              
             - application/json 
+        parameters:
+        -   name: username
+            in: path
+            required: true
+            type: string
+            example: some user
         responses:
             200:
                 description: OK
