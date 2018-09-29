@@ -71,12 +71,16 @@ td button {
                 <tbody>
                     <tr ng-repeat="rows in c.board.cells track by $index">
                         <td ng-repeat="cell in rows track by $index">
-                            <button type="button" right-click="c.markCell(cell)" >
+                            <button type="button"
+                                    ng-show="cell.value === null || cell.value == 'f' || cell.value == '?'"
+                                    right-click="c.markCell($parent.$index, $index)"
+                                    ng-click="c.discoverCell($parent.$index, $index)"
+                            >
                                 <i ng-show="cell.value == 'f'" class="glyphicon glyphicon-flag"></i>
                                 <i ng-hide="cell.value == 'f'" class="glyphicon">{{cell.value}}</i>
                                 <!--i class="glyphicon glyphicon-certificate"></i-->
                             </button>
-                            <span ng-show="false">1</span>
+                            <span ng-hide="cell.value === null || cell.value == 'f' || cell.value == '?'">{{cell.value}}</span>
                         </td>
                     </tr>
                 </tbody>

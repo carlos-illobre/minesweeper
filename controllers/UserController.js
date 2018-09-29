@@ -21,12 +21,22 @@ angular.module('minesweeper')
         this.board = board
     }
 
-    this.markCell = function(cell) {
+    this.markCell = function(row, column) {
+        var cell = this.board.cells[row][column]
         $scope.$apply(function () {
-            if (!cell.value) cell.value = '?'
-            else if (cell.value == '?') cell.value = 'f'
-            else cell.value = null
+            if (!cell.value) {
+                this.board = boardService.questionMarkCell(cell)
+            } else if (cell.value == '?') {
+                this.board = boardService.flagCell(cell)
+            } else {
+                this.board = boardService.unmarkCell(cell)
+            }
         });
+    }
+
+    this.discoverCell = function(row, column) {
+        var cell = this.board.cells[row][column]
+        this.board = boardService.discoverCell(cell)
     }
 
 })
