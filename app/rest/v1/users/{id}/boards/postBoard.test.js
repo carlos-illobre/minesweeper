@@ -1,3 +1,4 @@
+const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
 describe('POST board', () => {
@@ -63,22 +64,22 @@ describe('POST board', () => {
         .expect(201)
 
         const boardId = header.location.split('/').pop()
-        expect(header.location).toBe(encodeURI(`${request.url}/${boardId}`))
+        expect(header.location).to.equal(encodeURI(`${request.url}/${boardId}`))
 
         const [user] = await testApp.db.User.find({ username: existentUser.username })
 
-        expect(user).toBeTruthy()
-        expect(user.boards).toHaveLength(existentUser.boards.length + 1)
-        expect(user.boards[existentUser.boards.length].started).toBeTruthy()
-        expect(user.boards[existentUser.boards.length].time).toBeGreaterThanOrEqual(0)
-        expect(user.boards[existentUser.boards.length].cells).toHaveLength(rows)
+        expect(user).to.exist
+        expect(user.boards.length).to.equal(existentUser.boards.length + 1)
+        expect(user.boards[existentUser.boards.length].started).to.exist
+        expect(user.boards[existentUser.boards.length].time).to.equal(0)
+        expect(user.boards[existentUser.boards.length].cells.length).to.equal(rows)
         user.boards[existentUser.boards.length].cells.map(row => {
-            expect(row).toHaveLength(columns)
+            expect(row.length).to.equal(columns)
             /*const countMines =*/ row.reduce((countMines, cell) => {
-                expect(cell.display).toBeNull()
+                expect(cell.display).to.be.null
                 return countMines + (cell.mine ? 1 : 0)
             }, 0)
-            //            expect(countMines).toBe(mines)
+            //            expect(countMines).to.equal(mines)
         })
 
     })
@@ -96,22 +97,22 @@ describe('POST board', () => {
         .expect(201)
 
         const boardId = header.location.split('/').pop()
-        expect(header.location).toBe(encodeURI(`${request.url}/${boardId}`))
+        expect(header.location).to.equal(encodeURI(`${request.url}/${boardId}`))
 
         const [user] = await testApp.db.User.find({ username })
 
-        expect(user).toBeTruthy()
-        expect(user.boards).toHaveLength(1)
-        expect(user.boards[0].started).toBeTruthy()
-        expect(user.boards[0].time).toBeGreaterThanOrEqual(0)
-        expect(user.boards[0].cells).toHaveLength(rows)
+        expect(user).to.exist
+        expect(user.boards.length).to.equal(1)
+        expect(user.boards[0].started).to.exist
+        expect(user.boards[0].time).to.equal(0)
+        expect(user.boards[0].cells.length).to.equal(rows)
         user.boards[0].cells.map(row => {
-            expect(row).toHaveLength(columns)
+            expect(row.length).to.equal(columns)
             /*const countMines =*/ row.reduce((countMines, cell) => {
-                expect(cell.display).toBeNull()
+                expect(cell.display).to.be.null
                 return countMines + (cell.mine ? 1 : 0)
             }, 0)
-            //expect(countMines).toBe(mines)
+            //expect(countMines).to.equal(mines)
         })
 
     })

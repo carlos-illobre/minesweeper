@@ -1,3 +1,4 @@
+const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
 describe('GET user', () => {
@@ -64,7 +65,7 @@ describe('GET user', () => {
             })),
         }
 
-        expect(body).toEqual(expected)
+        expect(body).to.deep.equal(expected)
 
     })
 

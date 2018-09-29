@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "eslint --fix . && jest --coverage",
-    "test:debug": "node debug ./node_modules/jest/bin/jest.js",
+    "test": "eslint --fix . && NODE_ENV=test nyc --check-coverage --lines 100 --functions 100 --branches 100 mocha --exit  app/**/*.test.js models/**/*.test.js",
+    "test:debug": "NODE_ENV=test mocha debug app/**/*.test.js database/**/*.test.js",
     "nodemon": "nodemon -e js,json,yml"
   },
   "repository": {
@@ -38,30 +38,23 @@
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
+    "chai": "^4.1.2",
     "eslint": "^5.6.0",
-    "eslint-plugin-jest": "^21.22.0",
     "eslint-plugin-promise": "^4.0.1",
-    "jest": "^23.6.0",
+    "mocha": "^5.2.0",
     "mockgoose": "^7.3.5",
     "nodemon": "^1.18.4",
+    "nyc": "^12.0.2",
     "supertest": "^3.3.0"
   },
-  "jest": {
-    "verbose": true,
-    "collectCoverageFrom": [
+  "nyc": {
+    "include": [
       "app/**/*.js",
       "database/**/*.js"
     ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-      }
-    },
-    "forceCoverageMatch": [
-      "**/*.test.js"
+    "reporter": [
+      "lcov",
+      "text"
     ]
   }
 }
