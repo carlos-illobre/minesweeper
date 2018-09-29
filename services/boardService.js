@@ -13,7 +13,9 @@ angular.module('minesweeper')
         for (var i=0; i<rows; i++) {
             board.cells.push([])
             for (var j=0; j<columns; j++) {
-                board.cells[i][j] = null
+                board.cells[i][j] = {
+                    value: null
+                }
             }
         }
 

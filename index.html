@@ -10,6 +10,7 @@
 <script src="controllers/UserController.js"></script>
 <script src="services/userService.js"></script>
 <script src="services/boardService.js"></script>
+<script src="directives/rightClick.js"></script>
 <style>
 td {
     width: 25px;
@@ -70,9 +71,12 @@ td button {
                 <tbody>
                     <tr ng-repeat="rows in c.board.cells track by $index">
                         <td ng-repeat="cell in rows track by $index">
-                            <button type="button">
-                                <i class="glyphicon">{{cell}}</i>
+                            <button type="button" right-click="c.markCell(cell)" >
+                                <i ng-show="cell.value == 'f'" class="glyphicon glyphicon-flag"></i>
+                                <i ng-hide="cell.value == 'f'" class="glyphicon">{{cell.value}}</i>
+                                <!--i class="glyphicon glyphicon-certificate"></i-->
                             </button>
+                            <span ng-show="false">1</span>
                         </td>
                     </tr>
                 </tbody>
@@ -83,10 +87,6 @@ td button {
     </section>
 </main>
 <script>
-$( "#board" ).contextmenu(function() {
-  console.log( "Handler for .contextmenu() called." );
-return false
-});
 
 setInterval(function() {
     document.getElementById("timer").innerHTML = new Date().toISOString();
@@ -94,22 +94,3 @@ setInterval(function() {
 </script>
 </body>
 </html>
-                        <!--td ng-repeat="cell in rows">
-                            <i class="glyphicon glyphicon-certificate"></i>
-                        </td>
-                        <td>
-                            <button type="button">
-                                <i class="glyphicon glyphicon-flag"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <span>1</span>
-                        </td>
-                        <td>
-                            <span>1</span>
-                        </td>
-                        <td>
-                            <button>
-                                <i class="glyphicon">?</i>
-                            </button>
-                        </td-->
