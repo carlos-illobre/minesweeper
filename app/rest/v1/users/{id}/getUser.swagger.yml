@@ -1,0 +1,47 @@
+/v1/users/{username}:
+    get:                       
+        tags:                  
+            - user         
+        summary: Get a user with all his preserved boards
+        description: Get a user with all his preserved boards
+        produces:              
+            - application/json 
+        responses:
+            200:
+                description: OK
+                schema:
+                    type: object
+                    required:  
+                        - username
+                        - boards
+                    properties:
+                        username:
+                            type: string
+                        boards:                      
+                            type: array        
+                            items:                          
+                                type: object
+                                required:
+                                    - started
+                                    - time
+                                    - cells
+                                properties:                     
+                                    started:                             
+                                        type: string
+                                        format: datetime
+                                        example: 2018-09-29T20:42:54.684Z
+                                    time:
+                                        type: number
+                                        example: 10
+                                    cells:
+                                        type: array
+                                        items:
+                                            type: object
+                                            required:
+                                                - display
+                                            properties:
+                                                display:
+                                                    type: string
+                                                    example: 'f'
+            404:
+                description: User not found

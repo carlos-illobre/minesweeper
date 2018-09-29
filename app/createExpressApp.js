@@ -22,6 +22,7 @@ module.exports = ({ database, logger }) => express()
 })
 .use(express.static('./public'))
 .use('/rest', apiRouter)
+.use((req, res) => res.sendStatus(404))
 .use((error, req, res, next) => {
     logger.error(error, error)
     res.status(error.status).send(error.message)
