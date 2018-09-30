@@ -49,6 +49,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/resume', () => {
         const expected = {
             ...user,
             boards: user.boards.map(board => ({
+                preserved: null,
                 time: board.time,
                 started: new Date().toISOString().slice(0, 19),
                 cells: board.cells.map(row => row.map(({ display }) => ({ display }))),

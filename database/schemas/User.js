@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { pick, range } = require('lodash')
 
-const userSchema = mongoose.Schema({
+const userSchema = module.exports = mongoose.Schema({
     username: String,
     boards: [{
         gameover: Boolean,
@@ -16,6 +16,20 @@ const userSchema = mongoose.Schema({
         preserved: Date,
     }],
 })
+
+userSchema.methods.toJson = function() {
+    return {
+        username: this.username,
+        boards: this.boards.map(board => ({
+            ...pick(board, ['started', 'time', 'preserved']),
+            cells: board.cells.map(
+                row => row.map(
+                    cell => pick(cell, ['display'])
+                )
+            ),
+        })),
+    }
+}
 
 userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
@@ -48,18 +62,20 @@ userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
 }
 
-userSchema.methods.toJson = function() {
-    return {
-        username: this.username,
-        boards: this.boards.map(board => ({
-            ...pick(board, ['started', 'time', 'preserved']),
-            cells: board.cells.map(
-                row => row.map(
-                    cell => pick(cell, ['display'])
-                )
-            ),
-        })),
-    }
-}
+userSchema.methods.resumeBoard = async function(boardId) {
 
-module.exports = userSchema
+    const board = this.boards[boardId]
+
+    if (!board) {
+        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
+        error.status = 404
+        throw error
+    }
+
+    if (board.preserved) {
+        board.started = new Date()
+        board.preserved = null
+        await this.save()
+    }
+
+}
