@@ -30,7 +30,7 @@ userSchema.methods.toJson = function() {
         })),
     }
 }
-
+// TODO
 userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
     if (mines > rows * columns) {
@@ -72,6 +72,22 @@ userSchema.methods.getBoard = function(boardId) {
     return board
 }
 
+userSchema.methods.getCell = function({ boardId, row, column }) {
+    const board = this.getBoard(boardId)
+    const cells = board.cells[row]
+    if (!cells) {
+        const error = new Error(`The row ${row} is outside the board.`)
+        error.status = 404
+        throw error
+    }
+    const cell = cells[column]
+    if (!cell) {
+        const error = new Error(`The column ${column} is outside the board.`)
+        error.status = 404
+        throw error
+    }
+    return cell
+}
 
 userSchema.methods.resumeBoard = async function({ boardId }) {
     const board = this.getBoard(boardId)
@@ -91,80 +107,23 @@ userSchema.methods.preserveBoard = async function({ boardId }) {
     }
 }
 
-userSchema.methods.revealCell = async function({ boardId, row, column }) {
-    const board = this.getBoard(boardId)
-    const row2 = board.cells[row]
-
-    if (!row2) {
-        const error = new Error(`The row ${row} is outside the board.`)
-        error.status = 404
-        throw error
-    }
-
-    const cell = row2[column]
-    
-    if (!cell) {
-        const error = new Error(`The column ${column} is outside the board.`)
-        error.status = 404
-        throw error
-    }
-
-    cell.display = cell.mine ? '*' : ''
-
+userSchema.methods.setCellDisplay = async function({ boardId, row, column, display }) {
+    const cell = this.getCell({ boardId, row, column, display })
+    cell.display = display
+    const board = cell.parent()
     board.cells[row].splice(0, board.cells[row].length, ...board.cells[row])
-
     await this.save()
+}
 
+userSchema.methods.revealCell = async function({ boardId, row, column }) {
+    const cell = this.getCell({ boardId, row, column })
+    return this.setCellDisplay({ boardId, row, column, display: cell.mine ? '*' : '' })
 }
 
 userSchema.methods.questionMarkCell = async function({ boardId, row, column }) {
-    const board = this.getBoard(boardId)
-    const row2 = board.cells[row]
-
-    if (!row2) {
-        const error = new Error(`The row ${row} is outside the board.`)
-        error.status = 404
-        throw error
-    }
-
-    const cell = row2[column]
-    
-    if (!cell) {
-        const error = new Error(`The column ${column} is outside the board.`)
-        error.status = 404
-        throw error
-    }
-
-    cell.display = '?'
-
-    board.cells[row].splice(0, board.cells[row].length, ...board.cells[row])
-
-    await this.save()
-
+    return this.setCellDisplay({ boardId, row, column, display: '?' })
 }
 
 userSchema.methods.flagCell = async function({ boardId, row, column }) {
-    const board = this.getBoard(boardId)
-    const row2 = board.cells[row]
-
-    if (!row2) {
-        const error = new Error(`The row ${row} is outside the board.`)
-        error.status = 404
-        throw error
-    }
-
-    const cell = row2[column]
-    
-    if (!cell) {
-        const error = new Error(`The column ${column} is outside the board.`)
-        error.status = 404
-        throw error
-    }
-
-    cell.display = 'f'
-
-    board.cells[row].splice(0, board.cells[row].length, ...board.cells[row])
-
-    await this.save()
-
+    return this.setCellDisplay({ boardId, row, column, display: 'f' })
 }
