@@ -62,7 +62,7 @@ userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
 }
 
-userSchema.methods.resumeBoard = async function(boardId) {
+userSchema.methods.resumeBoard = async function({ boardId }) {
 
     const board = this.boards[boardId]
 
@@ -75,6 +75,24 @@ userSchema.methods.resumeBoard = async function(boardId) {
     if (board.preserved) {
         board.started = new Date()
         board.preserved = null
+        await this.save()
+    }
+
+}
+
+userSchema.methods.preserveBoard = async function({ boardId }) {
+
+    const board = this.boards[boardId]
+
+    if (!board) {
+        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
+        error.status = 404
+        throw error
+    }
+
+    if (!board.preserved) {
+        board.preserved = new Date()
+        board.time += Math.floor((board.preserved - board.started) / 1000)
         await this.save()
     }
 

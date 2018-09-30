@@ -13,7 +13,7 @@ module.exports = Router({mergeParams: true})
             throw error
         }
 
-        await user.resumeBoard(req.params.boardId)
+        await user.resumeBoard(req.params)
 
         res.json(user.toJson())
 
