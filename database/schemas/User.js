@@ -62,52 +62,37 @@ userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
 }
 
-userSchema.methods.resumeBoard = async function({ boardId }) {
-
+userSchema.methods.getBoard = function(boardId) {
     const board = this.boards[boardId]
-
     if (!board) {
         const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
         error.status = 404
         throw error
     }
+    return board
+}
 
+
+userSchema.methods.resumeBoard = async function({ boardId }) {
+    const board = this.getBoard(boardId)
     if (board.preserved) {
         board.started = new Date()
         board.preserved = null
         await this.save()
     }
-
 }
 
 userSchema.methods.preserveBoard = async function({ boardId }) {
-
-    const board = this.boards[boardId]
-
-    if (!board) {
-        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
-        error.status = 404
-        throw error
-    }
-
+    const board = this.getBoard(boardId)
     if (!board.preserved) {
         board.preserved = new Date()
         board.time += Math.floor((board.preserved - board.started) / 1000)
         await this.save()
     }
-
 }
 
 userSchema.methods.revealCell = async function({ boardId, row, column }) {
-
-    const board = this.boards[boardId]
-
-    if (!board) {
-        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
-        error.status = 404
-        throw error
-    }
-
+    const board = this.getBoard(boardId)
     const row2 = board.cells[row]
 
     if (!row2) {
@@ -133,15 +118,7 @@ userSchema.methods.revealCell = async function({ boardId, row, column }) {
 }
 
 userSchema.methods.questionMarkCell = async function({ boardId, row, column }) {
-
-    const board = this.boards[boardId]
-
-    if (!board) {
-        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
-        error.status = 404
-        throw error
-    }
-
+    const board = this.getBoard(boardId)
     const row2 = board.cells[row]
 
     if (!row2) {
@@ -167,15 +144,7 @@ userSchema.methods.questionMarkCell = async function({ boardId, row, column }) {
 }
 
 userSchema.methods.flagCell = async function({ boardId, row, column }) {
-
-    const board = this.boards[boardId]
-
-    if (!board) {
-        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
-        error.status = 404
-        throw error
-    }
-
+    const board = this.getBoard(boardId)
     const row2 = board.cells[row]
 
     if (!row2) {
