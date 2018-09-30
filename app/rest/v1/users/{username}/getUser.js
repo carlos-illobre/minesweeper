@@ -13,7 +13,7 @@ module.exports = Router({mergeParams: true})
             throw error
         }
 
-        res.send(user.toJson())
+        res.json(user.toJson())
 
     } catch(error) {
         next(error)
