@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { pick } = require('lodash')
 
 module.exports = Router({mergeParams: true})
-.put('/v1/users/:username/boards/:boardId/:row/:column', async (req, res, next) => {
+.put('/v1/users/:username/boards/:boardId/cells/:row/:column/flag', async (req, res, next) => {
 
     try {
 
@@ -44,9 +44,12 @@ module.exports = Router({mergeParams: true})
             throw error
         }
 
-        cell.display = cell.mine ? '*' : ''
+        cell.display = 'f'
 
-        await cell.save()
+        board.cells[req.params.row]
+        .splice(0, board.cells[req.params.row].length, ...board.cells[req.params.row])
+
+        await user.save()
 
         res.send({
             username: user.username,

@@ -2,7 +2,7 @@ const { Router } = require('express')
 const { pick } = require('lodash')
 
 module.exports = Router({mergeParams: true})
-.get('/v1/users/:username', async (req, res, next) => {
+.put('/v1/users/:username/boards/:boardId/preserve', async (req, res, next) => {
 
     try {
 
@@ -12,6 +12,22 @@ module.exports = Router({mergeParams: true})
             const error = new Error(`User ${req.params.username} not found.`)
             error.status = 404
             throw error
+        }
+
+        const board = user.boards[req.params.boardId]
+
+        if (!board) {
+            const error = new Error(
+                `The user ${req.params.username} does not have a board ${req.params.boardId}.`
+            )
+            error.status = 404
+            throw error
+        }
+
+        if (!board.preserved) {
+            board.preserved = new Date()
+            board.time += Math.floor((board.preserved - board.started) / 1000)
+            await user.save()
         }
 
         res.send({

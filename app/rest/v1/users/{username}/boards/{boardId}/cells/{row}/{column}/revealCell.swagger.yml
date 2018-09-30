@@ -1,9 +1,9 @@
-/v1/users/{username}/boards/{boardId}/{row}/{column}/flag:
+/v1/users/{username}/boards/{boardId}/cells/{row}/{column}:
     put:
         tags:
             - cell
-        summary: Put a flag in a cell
-        description: Put a flag in a cell
+        summary: Reveals a cell
+        description: Reveals a cell
         parameters:
         -   name: username
             in: path

@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
-describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => {
+describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/questionmark', () => {
 
     let testApp
 
@@ -9,7 +9,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
         testApp = await createTestApp()
     })
 
-    it('returns 200 and the board with a flag in the cell', async () => {
+    it('returns 200 and the board with a question mark in the cell', async () => {
 
         const user = {
             username: 'some name',
@@ -40,7 +40,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
         const column = 1
 
         const { body } = await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}/flag`)
+        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/questionmark`)
         .expect(200)
 
         const expected = {
@@ -52,7 +52,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
             })),
         }
 
-        expected.boards[0].cells[row][column].display = 'f'
+        expected.boards[0].cells[row][column].display = '?'
 
         expect(body).to.deep.equal(expected)
 
@@ -89,7 +89,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
         const column = 30
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}/flag`)
+        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/questionmark`)
         .expect(404, `The column ${column} is outside the board.`)
 
     })
@@ -125,7 +125,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
         const column = 0
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}/flag`)
+        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/questionmark`)
         .expect(404, 'The row -1 is outside the board.')
 
     })
@@ -162,7 +162,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
         const boardId = 10
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/${boardId}/${row}/${column}/flag`)
+        .put(`/rest/v1/users/${user.username}/boards/${boardId}/cells/${row}/${column}/questionmark`)
         .expect(404, `The user ${user.username} does not have a board ${boardId}.`)
 
     })
@@ -174,7 +174,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => 
         const column = 30
 
         await testApp
-        .put(`/rest/v1/users/${username}/boards/10/${row}/${column}/flag`)
+        .put(`/rest/v1/users/${username}/boards/10/cells/${row}/${column}/questionmark`)
         .expect(404, `User ${username} not found.`)
 
     })

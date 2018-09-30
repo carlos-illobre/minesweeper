@@ -1,0 +1,56 @@
+/v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag:
+    put:
+        tags:
+            - cell
+        summary: Put a flag in a cell
+        description: Put a flag in a cell
+        parameters:
+        -   name: username
+            in: path
+            required: true
+            type: string
+            example: some user
+        -   name: boardId
+            in: path
+            required: true
+            type: number
+            example: 3
+        -   name: row
+            in: path
+            required: true
+            type: number
+            example: 3
+        -   name: column
+            in: path
+            required: true
+            type: number
+            example: 3
+        responses:
+            200:
+                description: OK
+                schema:
+                    type: object
+                    required:
+                        - started
+                        - time
+                        - cells
+                    properties:                     
+                        started:                             
+                            type: string
+                            format: datetime
+                            example: 2018-09-29T20:42:54.684Z
+                        time:
+                            type: number
+                            example: 10
+                        cells:
+                            type: array
+                            items:
+                                type: object
+                                required:
+                                    - display
+                                properties:
+                                    display:
+                                        type: string
+                                        example: 'f'
+            404:
+                description: Not found

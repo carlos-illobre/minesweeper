@@ -1,9 +1,9 @@
-/v1/users/{username}/boards/{boardId}/{row}/{column}:
+/v1/users/{username}/boards/{boardId}/cells/{row}/{column}/questionmark:
     put:
         tags:
             - cell
-        summary: Reveals a cell
-        description: Reveals a cell
+        summary: Put a flag in a cell
+        description: Put a flag in a cell
         parameters:
         -   name: username
             in: path
@@ -51,6 +51,6 @@
                                 properties:
                                     display:
                                         type: string
-                                        example: 'f'
+                                        example: '?'
             404:
                 description: Not found

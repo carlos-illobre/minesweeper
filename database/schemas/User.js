@@ -12,6 +12,7 @@ const userSchema = mongoose.Schema({
                 mine: Boolean,
             }],
         ],
+        preserved: Date,
     }],
 })
 

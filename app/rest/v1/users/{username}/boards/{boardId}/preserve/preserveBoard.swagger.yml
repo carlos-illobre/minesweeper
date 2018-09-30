@@ -1,9 +1,9 @@
-/v1/users/{username}/boards/{boardId}/{row}/{column}/questionmark:
+/v1/users/{username}/boards/{boardId}/preserve:
     put:
         tags:
-            - cell
-        summary: Put a flag in a cell
-        description: Put a flag in a cell
+            - board
+        summary: Preserve a game
+        description: Preserve a game
         parameters:
         -   name: username
             in: path
@@ -11,16 +11,6 @@
             type: string
             example: some user
         -   name: boardId
-            in: path
-            required: true
-            type: number
-            example: 3
-        -   name: row
-            in: path
-            required: true
-            type: number
-            example: 3
-        -   name: column
             in: path
             required: true
             type: number

@@ -3,7 +3,7 @@ const path = require('path')
 
 module.exports = ({
     logger,
-    mongoose = require('mongoose'),
+    mongoose,
 }) => {
 
     const url = process.env.MONGODB_URL
@@ -32,12 +32,7 @@ module.exports = ({
         }
     }, {})
 
-    mongoose
-    .connection
-    .on('error', error => {
-        throw error
-    })
-    .once('open', () => logger.info(`MongoDB connected at ${url}`))
+    mongoose.connection.once('open', () => logger.info(`MongoDB connected at ${url}`))
 
     db.mongoose = mongoose
 

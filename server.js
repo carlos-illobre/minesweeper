@@ -1,7 +1,7 @@
 const port = process.env.PORT || 8080
 
 const logger = require('./createLogger.js')()
-const database = require('./database/createDatabase.js')({ logger })
+const database = require('./database/createDatabase.js')({ logger, mongoose:require('mongoose') })
 const app = require('./app/createExpressApp.js')({ logger, database })
 const server = require('http').createServer()
 
