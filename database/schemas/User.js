@@ -165,3 +165,37 @@ userSchema.methods.questionMarkCell = async function({ boardId, row, column }) {
     await this.save()
 
 }
+
+userSchema.methods.flagCell = async function({ boardId, row, column }) {
+
+    const board = this.boards[boardId]
+
+    if (!board) {
+        const error = new Error(`The user ${this.username} does not have a board ${boardId}.`)
+        error.status = 404
+        throw error
+    }
+
+    const row2 = board.cells[row]
+
+    if (!row2) {
+        const error = new Error(`The row ${row} is outside the board.`)
+        error.status = 404
+        throw error
+    }
+
+    const cell = row2[column]
+    
+    if (!cell) {
+        const error = new Error(`The column ${column} is outside the board.`)
+        error.status = 404
+        throw error
+    }
+
+    cell.display = 'f'
+
+    board.cells[row].splice(0, board.cells[row].length, ...board.cells[row])
+
+    await this.save()
+
+}
