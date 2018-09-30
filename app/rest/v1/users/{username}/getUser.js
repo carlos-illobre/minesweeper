@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const { pick } = require('lodash')
 
 module.exports = Router({mergeParams: true})
 .get('/v1/users/:username', async (req, res, next) => {
@@ -14,17 +13,7 @@ module.exports = Router({mergeParams: true})
             throw error
         }
 
-        res.send({
-            username: user.username,
-            boards: user.boards.map(board => ({
-                ...pick(board, ['started', 'time', 'preserved']),
-                cells: board.cells.map(
-                    row => row.map(
-                        cell => pick(cell, ['display'])
-                    )
-                ),
-            })),
-        })
+        res.send(user.toJson())
 
     } catch(error) {
         next(error)

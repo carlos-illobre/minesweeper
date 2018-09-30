@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const validate = require('express-validation')
 const Joi = require('joi')
-const { range } = require('lodash')
 
 module.exports = Router({mergeParams: true})
 .post('/v1/users/:username/boards', validate({
@@ -14,40 +13,12 @@ module.exports = Router({mergeParams: true})
 
     try {
 
-        if (req.body.mines > req.body.rows * req.body.columns) {
-            const error = new Error(`Not enough space for ${req.body.mines} mines in a board of ${req.body.rows}x${req.body.columns}.`)
-            error.status = 400
-            throw error
-        }
+        const user = await req.db.User.findOne({ username: req.params.username })
+            || await req.db.User.create({ username: req.params.username })
 
-        let countMines = 0
+        const boardId = await user.createBoard(req.body)
 
-        const board = {
-            started: new Date(),
-            time: 0,
-            cells: range(req.body.rows).map(
-                i => range(req.body.columns).map(
-                    j => ({
-                        display: null,
-                        mine: req.body.mines > countMines++,
-                    })
-                )
-            ),
-        }
-
-        const [user] = await req.db.User.find({ username: req.params.username })
-
-        if (!user) {
-            await req.db.User.create({
-                username: req.params.username,
-                boards: [board],
-            })
-            res.setHeader('Location', `${req.base}${req.originalUrl}/1`)
-        } else {
-            user.boards.push(board)
-            await user.save()
-            res.setHeader('Location', `${req.base}${req.originalUrl}/${user.boards.length}`)
-        }
+        res.setHeader('Location', `${req.base}${req.originalUrl}/${boardId}`)
 
         res.sendStatus(201)
 
