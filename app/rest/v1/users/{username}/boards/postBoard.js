@@ -1,7 +1,7 @@
 const { Router } = require('express')
-const { range } = require('lodash')
 const validate = require('express-validation')
 const Joi = require('joi')
+const { range } = require('lodash')
 
 module.exports = Router({mergeParams: true})
 .post('/v1/users/:username/boards', validate({
