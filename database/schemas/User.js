@@ -1,5 +1,10 @@
 const mongoose = require('mongoose')
-const { pick, range } = require('lodash')
+
+const { pick, range, floor, sample, without } = require('lodash')
+
+const flow = require('lodash/fp/flow')
+const reduce = require('lodash/fp/reduce')
+const get = require('lodash/fp/get')
 
 const userSchema = module.exports = mongoose.Schema({
     username: String,
@@ -30,7 +35,7 @@ userSchema.methods.toJson = function() {
         })),
     }
 }
-// TODO
+
 userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
     if (mines > rows * columns) {
@@ -39,22 +44,36 @@ userSchema.methods.createBoard = async function({rows, columns, mines}) {
         throw error
     }
 
-    let countMines = 0
+    const emptyCells = Array.from(
+        Array(rows), () => Array.from(
+            Array(columns), () => ({ display: null, mine: false })
+        )
+    )
 
-    const board = {
+    const cells = flow(
+        range,
+        reduce(({ posibilities, positions }) => {
+            const position = sample(posibilities)
+            return {
+                positions: [...positions, position],
+                posibilities: without(posibilities, position),
+            }
+        }, {
+            posibilities: range(rows * columns),
+            positions: [],
+        }),
+        get('positions'),
+        reduce((cells, position, index, array) => {
+            cells[floor(position / columns)][position % columns].mine = true
+            return cells
+        }, emptyCells)
+    )(mines)
+
+    this.boards.push({
         started: new Date(),
         time: 0,
-        cells: range(rows).map(
-            i => range(columns).map(
-                j => ({
-                    display: null,
-                    mine: mines > countMines++,
-                })
-            )
-        ),
-    }
-
-    this.boards.push(board)
+        cells,
+    })
 
     await this.save()
 
@@ -102,7 +121,7 @@ userSchema.methods.preserveBoard = async function({ boardId }) {
     const board = this.getBoard(boardId)
     if (!board.preserved) {
         board.preserved = new Date()
-        board.time += Math.floor((board.preserved - board.started) / 1000)
+        board.time += floor((board.preserved - board.started) / 1000)
         await this.save()
     }
 }

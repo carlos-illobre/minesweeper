@@ -73,14 +73,15 @@ describe('POST /v1/users/{username}/boards', () => {
         expect(user.boards[existentUser.boards.length].started).to.exist
         expect(user.boards[existentUser.boards.length].time).to.equal(0)
         expect(user.boards[existentUser.boards.length].cells.length).to.equal(rows)
-        user.boards[existentUser.boards.length].cells.map(row => {
+
+        const countMines = user.boards[existentUser.boards.length].cells.reduce((countMines, row) => {
             expect(row.length).to.equal(columns)
-            /*const countMines =*/ row.reduce((countMines, cell) => {
+            return countMines + row.reduce((countMines, cell) => {
                 expect(cell.display).to.be.null
                 return countMines + (cell.mine ? 1 : 0)
             }, 0)
-            //            expect(countMines).to.equal(mines)
-        })
+        }, 0)
+        expect(countMines).to.equal(mines)
 
     })
 
@@ -106,14 +107,16 @@ describe('POST /v1/users/{username}/boards', () => {
         expect(user.boards[0].started).to.exist
         expect(user.boards[0].time).to.equal(0)
         expect(user.boards[0].cells.length).to.equal(rows)
-        user.boards[0].cells.map(row => {
+
+        const countMines = user.boards[0].cells.reduce((countMines, row) => {
             expect(row.length).to.equal(columns)
-            /*const countMines =*/ row.reduce((countMines, cell) => {
+            return countMines + row.reduce((countMines, cell) => {
                 expect(cell.display).to.be.null
                 return countMines + (cell.mine ? 1 : 0)
             }, 0)
-            //expect(countMines).to.equal(mines)
-        })
+        }, 0)
+
+        expect(countMines).to.equal(mines)
 
     })
 
