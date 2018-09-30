@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
-describe('GET user', () => {
+describe('GET /v1/users/{username}', () => {
 
     let testApp
 

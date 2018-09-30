@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
-describe('POST board', () => {
+describe('POST /v1/users/{username}/boards', () => {
 
     let testApp
 

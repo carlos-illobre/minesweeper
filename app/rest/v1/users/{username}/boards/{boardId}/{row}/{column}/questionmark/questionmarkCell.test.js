@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
-describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
+describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/questionmark', () => {
 
     let testApp
 
@@ -9,7 +9,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
         testApp = await createTestApp()
     })
 
-    it('returns 200 and the board with the cell revealed without a mine', async () => {
+    it('returns 200 and the board with a question mark in the cell', async () => {
 
         const user = {
             username: 'some name',
@@ -40,7 +40,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
         const column = 1
 
         const { body } = await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}`)
+        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}/questionmark`)
         .expect(200)
 
         const expected = {
@@ -52,56 +52,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
             })),
         }
 
-        expected.boards[0].cells[row][column].display = ''
-
-        expect(body).to.deep.equal(expected)
-
-    })
-
-    it('returns 200 and the board with the cell revealed with a mine', async () => {
-
-        const user = {
-            username: 'some name',
-            boards: [{
-                started: new Date(),
-                time: 10,
-                cells: [
-                    [{
-                        display: null,
-                        mine: true,
-                    }, {
-                        display: 'f',
-                        mine: false,
-                    }], [{
-                        display: '?',
-                        mine: false,
-                    }, {
-                        display: null,
-                        mine: true,
-                    }],
-                ],
-            }],
-        }
-
-        await testApp.db.User.create(user)
-
-        const row = 1
-        const column = 1
-
-        const { body } = await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}`)
-        .expect(200)
-
-        const expected = {
-            ...user,
-            boards: user.boards.map(board => ({
-                ...board,
-                started: board.started.toISOString(),
-                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
-            })),
-        }
-
-        expected.boards[0].cells[row][column].display = '*'
+        expected.boards[0].cells[row][column].display = '?'
 
         expect(body).to.deep.equal(expected)
 
@@ -138,7 +89,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
         const column = 30
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}`)
+        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}/questionmark`)
         .expect(404, `The column ${column} is outside the board.`)
 
     })
@@ -174,7 +125,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
         const column = 0
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}`)
+        .put(`/rest/v1/users/${user.username}/boards/0/${row}/${column}/questionmark`)
         .expect(404, 'The row -1 is outside the board.')
 
     })
@@ -211,7 +162,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
         const boardId = 10
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/${boardId}/${row}/${column}`)
+        .put(`/rest/v1/users/${user.username}/boards/${boardId}/${row}/${column}/questionmark`)
         .expect(404, `The user ${user.username} does not have a board ${boardId}.`)
 
     })
@@ -223,7 +174,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}', () => {
         const column = 30
 
         await testApp
-        .put(`/rest/v1/users/${username}/boards/10/${row}/${column}`)
+        .put(`/rest/v1/users/${username}/boards/10/${row}/${column}/questionmark`)
         .expect(404, `User ${username} not found.`)
 
     })

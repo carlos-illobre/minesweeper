@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
-describe('PUT cell', () => {
+describe('PUT /v1/users/{username}/boards/{boardId}/{row}/{column}/flag', () => {
 
     let testApp
 
