@@ -13,7 +13,7 @@ module.exports = ({
         logger.info(`${coll},${method},${JSON.stringify(query)},${JSON.stringify(options)}`)
     })
 
-    mongoose.connect(url)
+    mongoose.connect(url, { useNewUrlParser: true })
 
     const db = glob.sync('./schemas/**/*.js', { cwd: __dirname })
     .map(filename => {
