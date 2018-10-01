@@ -1,9 +1,12 @@
 const mongoose = require('mongoose')
 
-const { pick, range, floor, sample, without } = require('lodash')
+const { pick, range, floor, sample, without, toInteger, sumBy } = require('lodash')
 
 const flow = require('lodash/fp/flow')
 const reduce = require('lodash/fp/reduce')
+const map = require('lodash/fp/map')
+const filter = require('lodash/fp/filter')
+const compact = require('lodash/fp/compact')
 const get = require('lodash/fp/get')
 
 const userSchema = module.exports = mongoose.Schema({
@@ -126,23 +129,75 @@ userSchema.methods.preserveBoard = async function({ boardId }) {
     }
 }
 
-userSchema.methods.setCellDisplay = async function({ boardId, row, column, display }) {
+userSchema.methods.setCellDisplay = function({ boardId, row, column, display }) {
     const cell = this.getCell({ boardId, row, column, display })
     cell.display = display
     const board = cell.parent()
     board.cells[row].splice(0, board.cells[row].length, ...board.cells[row])
-    await this.save()
 }
 
 userSchema.methods.revealCell = async function({ boardId, row, column }) {
-    const cell = this.getCell({ boardId, row, column })
-    return this.setCellDisplay({ boardId, row, column, display: cell.mine ? '*' : '' })
+
+    if (this.getCell({ boardId, row, column }).mine) {
+        this.setCellDisplay({ boardId, row, column, display: '*' })
+        await this.save()
+        return
+    }
+
+    const displayNearMinesInfo = ({ boardId, row, column }) => {
+
+        const nearCells = flow(
+            map(([row, column]) => {
+                try {
+                    return {
+                        row,
+                        column,
+                        mine: this.getCell({boardId, row, column}).mine,
+                    }
+                } catch (error) { return }
+            }),
+            compact
+        )([
+            [row-1, column-1],
+            [row-1, column],
+            [row-1, column+1],
+            [row, column-1],
+            [row, column+1],
+            [row+1, column-1],
+            [row+1, column],
+            [row+1, column+1],
+        ])
+
+        const nearMines = sumBy(nearCells, 'mine')
+
+        this.setCellDisplay({ boardId, row, column, display: nearMines })
+
+        if (!nearMines) {
+            flow(
+                map(({ row, column }) => ({
+                    row,
+                    column,
+                    display: this.getCell({ boardId, row, column }).display,
+                })),
+                filter(({ display }) => isNaN(parseInt(display))),
+                map(({row, column}) => displayNearMinesInfo({ boardId, row, column }))
+            )(nearCells)
+        }
+
+    }
+
+    displayNearMinesInfo({ boardId, row: toInteger(row), column: toInteger(column) })
+
+    return this.save()
+
 }
 
 userSchema.methods.questionMarkCell = async function({ boardId, row, column }) {
-    return this.setCellDisplay({ boardId, row, column, display: '?' })
+    this.setCellDisplay({ boardId, row, column, display: '?' })
+    return this.save()
 }
 
 userSchema.methods.flagCell = async function({ boardId, row, column }) {
-    return this.setCellDisplay({ boardId, row, column, display: 'f' })
+    this.setCellDisplay({ boardId, row, column, display: 'f' })
+    return this.save()
 }

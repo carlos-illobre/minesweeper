@@ -19,12 +19,27 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
                 cells: [
                     [{
                         display: null,
+                        mine: false,
+                    }, {
+                        display: null,
                         mine: true,
                     }, {
                         display: null,
                         mine: false,
                     }], [{
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }], [{
                         display: '?',
+                        mine: false,
+                    }, {
+                        display: null,
                         mine: false,
                     }, {
                         display: 'f',
@@ -36,8 +51,8 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
 
         await testApp.db.User.create(user)
 
-        const row = 0
-        const column = 1
+        const row = 1
+        const column = 0
 
         const { body } = await testApp
         .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}`)
@@ -52,7 +67,151 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
             })),
         }
 
-        expected.boards[0].cells[row][column].display = ''
+        expected.boards[0].cells[row][column].display = '1'
+
+        expect(body).to.deep.equal(expected)
+
+    })
+
+    it('returns 200 and the board with the cell revealed without a mine if the cell has a flag', async () => {
+
+        const user = {
+            username: 'some name',
+            boards: [{
+                started: new Date(),
+                time: 10,
+                cells: [
+                    [{
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: true,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }], [{
+                        display: 'f',
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }], [{
+                        display: '?',
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: 'f',
+                        mine: true,
+                    }],
+                ],
+            }],
+        }
+
+        await testApp.db.User.create(user)
+
+        const row = 1
+        const column = 0
+
+        const { body } = await testApp
+        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}`)
+        .expect(200)
+
+        const expected = {
+            ...user,
+            boards: user.boards.map(board => ({
+                ...board,
+                started: board.started.toISOString(),
+                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
+            })),
+        }
+
+        expected.boards[0].cells[row][column].display = '1'
+
+        expect(body).to.deep.equal(expected)
+
+    })
+
+    it('returns 200 and the board with the cell and the near cells revealed', async () => {
+
+        const user = {
+            username: 'some name',
+            boards: [{
+                started: new Date(),
+                time: 10,
+                cells: [
+                    [{
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: true,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }], [{
+                        display: '?',
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: 'f',
+                        mine: false,
+                    }], [{
+                        display: '?',
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: null,
+                        mine: false,
+                    }, {
+                        display: 'f',
+                        mine: true,
+                    }],
+                ],
+            }],
+        }
+
+        await testApp.db.User.create(user)
+
+        const row = 2
+        const column = 0
+
+        const { body } = await testApp
+        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}`)
+        .expect(200)
+
+        const expected = {
+            ...user,
+            boards: user.boards.map(board => ({
+                ...board,
+                started: board.started.toISOString(),
+                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
+            })),
+        }
+
+        expected.boards[0].cells[0][0].display = '0'
+        expected.boards[0].cells[0][1].display = '1'
+        expected.boards[0].cells[1][0].display = '0'
+        expected.boards[0].cells[1][1].display = '1'
+        expected.boards[0].cells[1][2].display = '2'
+        expected.boards[0].cells[2][0].display = '0'
+        expected.boards[0].cells[2][1].display = '0'
+        expected.boards[0].cells[2][2].display = '1'
 
         expect(body).to.deep.equal(expected)
 
