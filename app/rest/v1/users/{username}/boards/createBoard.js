@@ -20,7 +20,7 @@ module.exports = Router({mergeParams: true})
 
         res.setHeader('Location', `${req.base}${req.originalUrl}/${boardId}`)
 
-        res.sendStatus(201)
+        res.status(201).json(user.boardToJson(boardId))
 
     } catch(error) {
         next(error)

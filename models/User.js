@@ -28,14 +28,20 @@ const userSchema = module.exports = mongoose.Schema({
 userSchema.methods.toJson = function() {
     return {
         username: this.username,
-        boards: this.boards.map(board => ({
-            ...pick(board, ['started', 'time', 'preserved']),
-            cells: board.cells.map(
-                row => row.map(
-                    cell => pick(cell, ['display'])
-                )
-            ),
-        })),
+        boards: this.boards.map((board, index) => this.boardToJson(index)),
+    }
+}
+
+userSchema.methods.boardToJson = function(boardId) {
+    const board = this.boards[boardId]
+    return {
+        ...pick(board, ['started', 'time', 'preserved']),
+        id: boardId,
+        cells: board.cells.map(
+            row => row.map(
+                cell => pick(cell, ['display'])
+            )
+        ),
     }
 }
 
@@ -80,7 +86,7 @@ userSchema.methods.createBoard = async function({rows, columns, mines}) {
 
     await this.save()
 
-    return this.boards.length
+    return this.boards.length - 1
 
 }
 

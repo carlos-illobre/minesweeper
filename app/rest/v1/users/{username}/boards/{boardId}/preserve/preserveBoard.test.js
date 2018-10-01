@@ -47,8 +47,9 @@ describe('PUT /v1/users/{username}/boards/{boardId}/preserve', () => {
 
         const expected = {
             ...user,
-            boards: user.boards.map(board => ({
+            boards: user.boards.map((board, index) => ({
                 ...board,
+                id: index,
                 time: minutes * 60,
                 started: board.started.toISOString(),
                 cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
@@ -107,8 +108,9 @@ describe('PUT /v1/users/{username}/boards/{boardId}/preserve', () => {
 
         const expected = {
             ...user,
-            boards: user.boards.map(board => ({
+            boards: user.boards.map((board, index) => ({
                 ...board,
+                id: index,
                 started: board.started.toISOString(),
                 cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
                 preserved: board.preserved.toISOString().slice(0, 19),

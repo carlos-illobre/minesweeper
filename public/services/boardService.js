@@ -2,29 +2,33 @@ angular.module('minesweeper')
 .service('boardService', function($http) {
 
     this.createBoard = function(username, rows, columns, mines) {
+        return $http.post('/rest/v1/users/${username}/boards'.replace('${username}', username), {
+            rows: rows,
+            columns: columns,
+            mines: mines
+        })
+        .then(function(res) {
+            return res.data
+        })
+    }
 
-/*
-        const board = {
-            id: boards.length + 1,
+    this.discoverCell = function(username, boardId, row, column) {
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}'
+        .replace('${username}', username)
+        .replace('${boardId}', boardId)
+        .replace('${row}', row)
+        .replace('${column}', column)
+        return $http.put(url, {
             username: username,
-            started: new Date(),
-            cells: [],
-        };
-
-        for (let i=0; i<rows; i++) {
-            board.cells.push([]);
-            for (let j=0; j<columns; j++) {
-                board.cells[i][j] = {
-                    board: board,
-                    value: null,
-                    row: i,
-                    column: j,
-                };
-            }
-        }
-
-        return board;*/
-    };
+            boardId: boardId,
+            row: row,
+            column: column
+        })
+        .then(function(res) {
+console.log(res)
+            return res.data
+        })
+    }
 
     this.getBoards = function(username) {
         return boards;
@@ -51,11 +55,6 @@ angular.module('minesweeper')
 
     this.unmarkCell = function(cell) {
         cell.value = null;
-        return cell.board;
-    };
-
-    this.discoverCell = function(cell) {
-        cell.value = Math.floor(Math.random() * 10) || '';
         return cell.board;
     };
 

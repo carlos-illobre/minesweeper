@@ -59,20 +59,19 @@
                     <tr ng-repeat="rows in c.board.cells track by $index">
                         <td ng-repeat="cell in rows track by $index">
                             <button type="button"
-                                    ng-show="cell.value === null || cell.value == 'f' || cell.value == '?'"
+                                    ng-show="cell.display === null || cell.display == 'f' || cell.display == '?'"
                                     right-click="c.markCell($parent.$index, $index)"
                                     ng-click="c.discoverCell($parent.$index, $index)"
                             >
-                                <i ng-show="cell.value == 'f'" class="glyphicon glyphicon-flag"></i>
-                                <i ng-hide="cell.value == 'f'" class="glyphicon">{{cell.value}}</i>
-                                <!--i class="glyphicon glyphicon-certificate"></i-->
+                                <i ng-show="cell.display == 'f'" class="glyphicon glyphicon-flag"></i>
+                                <i ng-hide="cell.display == 'f'" class="glyphicon">{{cell.display}}</i>
                             </button>
-                            <span ng-hide="cell.value === null || cell.value == 'f' || cell.value == '?'">{{cell.value}}</span>
+                            <span ng-hide="cell.display === null || cell.display == 'f' || cell.display == '?'">{{cell.display}}</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <span>{{c.timer | date:'yyyy-MM-dd hh:mm:ssa'}}</span>
+            <span>{{c.timer}}</span>
             <button type="submit">Preserve</button>
         </form>
     </section>

@@ -45,8 +45,9 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/questio
 
         const expected = {
             ...user,
-            boards: user.boards.map(board => ({
+            boards: user.boards.map((board, index) => ({
                 ...board,
+                id: index,
                 started: board.started.toISOString(),
                 cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
             })),

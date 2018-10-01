@@ -59,15 +59,13 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
         .expect(200)
 
         const expected = {
-            ...user,
-            boards: user.boards.map(board => ({
-                ...board,
-                started: board.started.toISOString(),
-                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
-            })),
+            ...user.boards[0],
+            id: '0',
+            started: user.boards[0].started.toISOString(),
+            cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display }))),
         }
 
-        expected.boards[0].cells[row][column].display = '1'
+        expected.cells[row][column].display = '1'
 
         expect(body).to.deep.equal(expected)
 
@@ -123,15 +121,13 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
         .expect(200)
 
         const expected = {
-            ...user,
-            boards: user.boards.map(board => ({
-                ...board,
-                started: board.started.toISOString(),
-                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
-            })),
+            ...user.boards[0],
+            id: '0',
+            started: user.boards[0].started.toISOString(),
+            cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display }))),
         }
 
-        expected.boards[0].cells[row][column].display = '1'
+        expected.cells[row][column].display = '1'
 
         expect(body).to.deep.equal(expected)
 
@@ -196,22 +192,20 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
         .expect(200)
 
         const expected = {
-            ...user,
-            boards: user.boards.map(board => ({
-                ...board,
-                started: board.started.toISOString(),
-                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
-            })),
+            ...user.boards[0],
+            id: '0',
+            started: user.boards[0].started.toISOString(),
+            cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display }))),
         }
 
-        expected.boards[0].cells[0][0].display = '0'
-        expected.boards[0].cells[0][1].display = '1'
-        expected.boards[0].cells[1][0].display = '0'
-        expected.boards[0].cells[1][1].display = '1'
-        expected.boards[0].cells[1][2].display = '2'
-        expected.boards[0].cells[2][0].display = '0'
-        expected.boards[0].cells[2][1].display = '0'
-        expected.boards[0].cells[2][2].display = '1'
+        expected.cells[0][0].display = '0'
+        expected.cells[0][1].display = '1'
+        expected.cells[1][0].display = '0'
+        expected.cells[1][1].display = '1'
+        expected.cells[1][2].display = '2'
+        expected.cells[2][0].display = '0'
+        expected.cells[2][1].display = '0'
+        expected.cells[2][2].display = '1'
 
         expect(body).to.deep.equal(expected)
 
@@ -252,15 +246,13 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
         .expect(200)
 
         const expected = {
-            ...user,
-            boards: user.boards.map(board => ({
-                ...board,
-                started: board.started.toISOString(),
-                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
-            })),
+            ...user.boards[0],
+            id: '0',
+            started: user.boards[0].started.toISOString(),
+            cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display }))),
         }
 
-        expected.boards[0].cells[row][column].display = '*'
+        expected.cells[row][column].display = '*'
 
         expect(body).to.deep.equal(expected)
 

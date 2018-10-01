@@ -48,7 +48,8 @@ describe('PUT /v1/users/{username}/boards/{boardId}/resume', () => {
 
         const expected = {
             ...user,
-            boards: user.boards.map(board => ({
+            boards: user.boards.map((board, index) => ({
+                id: index,
                 preserved: null,
                 time: board.time,
                 started: new Date().toISOString().slice(0, 19),
@@ -106,8 +107,9 @@ describe('PUT /v1/users/{username}/boards/{boardId}/resume', () => {
 
         const expected = {
             ...user,
-            boards: user.boards.map(board => ({
+            boards: user.boards.map((board, index) => ({
                 ...board,
+                id: index,
                 started: board.started.toISOString(),
                 cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
             })),

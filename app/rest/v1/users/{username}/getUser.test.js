@@ -58,8 +58,9 @@ describe('GET /v1/users/{username}', () => {
 
         const expected = {
             ...user,
-            boards: user.boards.map(board => ({
+            boards: user.boards.map((board, index) => ({
                 ...board,
+                id: index,
                 started: board.started.toISOString(),
                 cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
             })),

@@ -2,26 +2,36 @@ angular.module('minesweeper')
 .controller('UserController', function($scope, userService, boardService) {
 
     this.login = function() {
-
         var that = this
-
         userService.login(this.username)
-        .then(function(res) {
-            that.boards = res.data.boards
+        .then(function(user) {
+            that.boards = user.boards.filter(function(board) {
+                return board.preserved
+            })
+            that.logged = user.username
         })
-
-        this.logged = this.username
-
     }
 
     this.createBoard = function() {
-        this.board = boardService.createBoard(this.logged, this.rows, this.columns, this.mines)
-        const that = this
-        this.interval = setInterval(function() {
-            $scope.$apply(function () {
-                that.timer = new Date()
-            })
-        }, 1000)
+        var that = this
+        boardService.createBoard(this.logged, this.rows, this.columns, this.mines)
+        .then(function(board) {
+            that.board = board
+            that.timer = 0
+            that.interval = setInterval(function() {
+                $scope.$apply(function () {
+                    that.timer++
+                })
+            }, 1000)
+        })
+    }
+
+    this.discoverCell = function(row, column) {
+        var that = this
+        boardService.discoverCell(this.logged, this.board.id, row, column)
+        .then(function(board) {
+            that.board = board
+        })
     }
 
     this.preserveBoard = function() {
@@ -53,11 +63,6 @@ angular.module('minesweeper')
                 this.board = boardService.unmarkCell(cell);
             }
         });
-    };
-
-    this.discoverCell = function(row, column) {
-        const cell = this.board.cells[row][column];
-        this.board = boardService.discoverCell(cell);
     };
 
 });
