@@ -15,9 +15,9 @@ module.exports = ({
 
     mongoose.connect(url, { useNewUrlParser: true })
 
-    const db = glob.sync('./schemas/**/*.js', {
+    const db = glob.sync('../models/**/*.js', {
         cwd: __dirname,
-        ignore: './schemas/**/*.test.js',
+        ignore: '../models/**/*.test.js',
     })
     .map(filename => {
         return {

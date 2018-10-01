@@ -50,7 +50,8 @@
   "nyc": {
     "include": [
       "app/**/*.js",
-      "database/**/*.js"
+      "database/**/*.js",
+      "models/**/*.js"
     ],
     "reporter": [
       "lcov",
