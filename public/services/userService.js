@@ -1,10 +1,8 @@
 angular.module('minesweeper')
 .service('userService', function($http) {
 
-    let _username;
-
     this.login = function(username) {
-        _username = username;
+        return $http.get('/rest/v1/users/${username}'.replace('${username}', username))
     };
 
 });

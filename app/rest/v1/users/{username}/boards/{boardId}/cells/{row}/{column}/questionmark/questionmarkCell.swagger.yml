@@ -2,8 +2,8 @@
     put:
         tags:
             - cell
-        summary: Put a flag in a cell
-        description: Put a flag in a cell
+        summary: Put a question mark in a cell
+        description: Put a question mark in a cell
         parameters:
         -   name: username
             in: path

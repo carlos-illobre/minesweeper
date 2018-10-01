@@ -1,10 +1,9 @@
 angular.module('minesweeper')
 .service('boardService', function($http) {
 
-    const boards = [];
-
     this.createBoard = function(username, rows, columns, mines) {
 
+/*
         const board = {
             id: boards.length + 1,
             username: username,
@@ -24,7 +23,7 @@ angular.module('minesweeper')
             }
         }
 
-        return board;
+        return board;*/
     };
 
     this.getBoards = function(username) {

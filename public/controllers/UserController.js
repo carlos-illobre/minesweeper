@@ -2,19 +2,27 @@ angular.module('minesweeper')
 .controller('UserController', function($scope, userService, boardService) {
 
     this.login = function() {
-        userService.login(this.username);
-        this.logged = this.username;
-    };
+
+        var that = this
+
+        userService.login(this.username)
+        .then(function(res) {
+            that.boards = res.data.boards
+        })
+
+        this.logged = this.username
+
+    }
 
     this.createBoard = function() {
-        this.board = boardService.createBoard(this.logged, this.rows, this.columns, this.mines);
-        const that = this;
+        this.board = boardService.createBoard(this.logged, this.rows, this.columns, this.mines)
+        const that = this
         this.interval = setInterval(function() {
             $scope.$apply(function () {
-                that.timer = new Date();
-            });
-        }, 1000);
-    };
+                that.timer = new Date()
+            })
+        }, 1000)
+    }
 
     this.preserveBoard = function() {
         boardService.preserveBoard(this.board);
