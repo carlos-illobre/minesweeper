@@ -1,6 +1,8 @@
 angular.module('minesweeper')
 .controller('UserController', function($scope, userService, boardService) {
 
+    this.username = this.logged = 'some user'
+
     this.login = function() {
         var that = this
         userService.login(this.username)
