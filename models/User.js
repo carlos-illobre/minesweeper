@@ -207,3 +207,8 @@ userSchema.methods.flagCell = async function({ boardId, row, column }) {
     this.setCellDisplay({ boardId, row, column, display: 'f' })
     return this.save()
 }
+
+userSchema.methods.unmarkCell = async function({ boardId, row, column }) {
+    this.setCellDisplay({ boardId, row, column, display: null })
+    return this.save()
+}
