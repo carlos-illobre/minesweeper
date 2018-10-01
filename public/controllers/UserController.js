@@ -1,16 +1,14 @@
 angular.module('minesweeper')
 .controller('UserController', function($scope, userService, boardService) {
 
-    this.username = this.logged = 'some user'
-
     this.login = function() {
         var that = this
-        userService.login(this.username)
-        .then(function(user) {
-            that.boards = user.boards.filter(function(board) {
-                return board.preserved
-            })
-            that.logged = user.username
+        userService.login(this.logged)
+        .then(function(boards) {
+            that.boards = boards
+        })
+        .catch(function(error) {
+            that.boards = []
         })
     }
 
