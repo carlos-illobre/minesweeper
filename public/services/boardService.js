@@ -18,12 +18,7 @@ angular.module('minesweeper')
         .replace('${boardId}', boardId)
         .replace('${row}', row)
         .replace('${column}', column)
-        return $http.put(url, {
-            username: username,
-            boardId: boardId,
-            row: row,
-            column: column
-        })
+        return $http.put(url)
         .then(function(res) {
             return res.data
         })
@@ -35,12 +30,7 @@ angular.module('minesweeper')
         .replace('${boardId}', boardId)
         .replace('${row}', row)
         .replace('${column}', column)
-        return $http.put(url, {
-            username: username,
-            boardId: boardId,
-            row: row,
-            column: column
-        })
+        return $http.put(url)
         .then(function(res) {
             return res.data
         })
@@ -52,12 +42,7 @@ angular.module('minesweeper')
         .replace('${boardId}', boardId)
         .replace('${row}', row)
         .replace('${column}', column)
-        return $http.put(url, {
-            username: username,
-            boardId: boardId,
-            row: row,
-            column: column
-        })
+        return $http.put(url)
         .then(function(res) {
             return res.data
         })
@@ -69,28 +54,32 @@ angular.module('minesweeper')
         .replace('${boardId}', boardId)
         .replace('${row}', row)
         .replace('${column}', column)
-        return $http.put(url, {
-            username: username,
-            boardId: boardId,
-            row: row,
-            column: column
-        })
+        return $http.put(url)
         .then(function(res) {
             return res.data
         })
     };
 
-    this.getBoards = function(username) {
-        return boards;
-    };
+    this.preserveBoard = function(username, boardId) {
+        var url = '/rest/v1/users/${username}/boards/${boardId}/preserve'
+        .replace('${username}', username)
+        .replace('${boardId}', boardId)
+        return $http.put(url)
+        .then(function(res) {
+            return res.data.boards.filter(function(board) {
+                return board.preserved
+            })
+        })
+    }
 
-    this.preserveBoard = function(board) {
-        board.preserved = new Date();
-        boards.push(board);
-    };
+    this.resumeBoard = function(username, boardId) {
+        var url = '/rest/v1/users/${username}/boards/${boardId}/resume'
+        .replace('${username}', username)
+        .replace('${boardId}', boardId)
+        return $http.put(url)
+        .then(function(res) {
+            return res.data.boards
+        })
+    }
 
-    this.resumeBoard = function(board) {
-        
-    };
-
-});
+})

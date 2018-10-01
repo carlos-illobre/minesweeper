@@ -41,7 +41,7 @@
             <button type="submit">Start!</button>
         </form>
     </section>
-    <section ng-show="c.boards.length">
+    <section ng-show="c.boards.length && !c.board">
         <h3>Boards</h3>
         <ol>
             <li ng-repeat="board in c.boards">

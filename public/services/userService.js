@@ -6,6 +6,6 @@ angular.module('minesweeper')
         .then(function(res) {
             return res.data
         })
-    };
+    }
 
-});
+})

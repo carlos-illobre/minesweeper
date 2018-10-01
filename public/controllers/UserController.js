@@ -58,21 +58,32 @@ angular.module('minesweeper')
     }
 
     this.preserveBoard = function() {
-        boardService.preserveBoard(this.board);
-        this.boards = boardService.getBoards(this.logged);
+        clearInterval(this.interval)
+        var that = this
+        boardService.preserveBoard(this.logged, this.board.id)
+        .then(function(boards) {
+            that.boards = boards
+        })
         this.board = null;
-        clearInterval(this.interval); 
-    };
+    }
 
     this.resumeBoard = function(board) {
-        this.boards.splice(this.boards.indexOf(board), 1);
-        this.board = board;
-        const that = this;
-        this.interval = setInterval(function() {
-            $scope.$apply(function () {
-                that.timer = new Date();
-            });
-        }, 1000);
-    };
+        var that = this
+        boardService.resumeBoard(this.logged, board.id)
+        .then(function(boards) {
+            that.boards = boards.filter(function(board) {
+                return board.preserved
+            })
+            that.board = boards.find(function(item) {
+                return item.id == board.id
+            })
+            that.timer = that.board.time
+            that.interval = setInterval(function() {
+                $scope.$apply(function () {
+                    that.timer++
+                })
+            }, 1000)
+        })
+    }
 
-});
+})
