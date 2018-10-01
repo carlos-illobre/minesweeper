@@ -24,6 +24,9 @@ angular.module('minesweeper')
                 })
             }, 1000)
         })
+        .catch(function(error) {
+            alert('Rows, columns and mines can not be empty')
+        })
     }
 
     this.discoverCell = function(row, column) {
