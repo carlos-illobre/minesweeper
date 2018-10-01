@@ -15,7 +15,7 @@ module.exports = Router({mergeParams: true})
 
         await user.flagCell(req.params)
 
-        res.json(user.toJson())
+        res.json(user.boardToJson(req.params.boardId))
 
     } catch(error) {
         next(error)

@@ -34,6 +34,29 @@ angular.module('minesweeper')
         })
     }
 
+    this.markCell = function(row, column) {
+        const display = this.board.cells[row][column].display
+        const that = this
+        $scope.$apply(function () {
+            if (display === null) {
+                boardService.questionMarkCell(that.logged, that.board.id, row, column)
+                .then(function(board) {
+                    that.board = board
+                })
+            } else if (display == '?') {
+                boardService.flagCell(that.logged, that.board.id, row, column)
+                .then(function(board) {
+                    that.board = board
+                })
+            } else if (display == 'f') {
+                boardService.unmarkCell(that.logged, that.board.id, row, column)
+                .then(function(board) {
+                    that.board = board
+                })
+            }
+        })
+    }
+
     this.preserveBoard = function() {
         boardService.preserveBoard(this.board);
         this.boards = boardService.getBoards(this.logged);
@@ -50,19 +73,6 @@ angular.module('minesweeper')
                 that.timer = new Date();
             });
         }, 1000);
-    };
-
-    this.markCell = function(row, column) {
-        const cell = this.board.cells[row][column];
-        $scope.$apply(function () {
-            if (!cell.value) {
-                this.board = boardService.questionMarkCell(cell);
-            } else if (cell.value == '?') {
-                this.board = boardService.flagCell(cell);
-            } else {
-                this.board = boardService.unmarkCell(cell);
-            }
-        });
     };
 
 });

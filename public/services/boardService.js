@@ -25,10 +25,60 @@ angular.module('minesweeper')
             column: column
         })
         .then(function(res) {
-console.log(res)
             return res.data
         })
     }
+
+    this.flagCell = function(username, boardId, row, column) {
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/flag'
+        .replace('${username}', username)
+        .replace('${boardId}', boardId)
+        .replace('${row}', row)
+        .replace('${column}', column)
+        return $http.put(url, {
+            username: username,
+            boardId: boardId,
+            row: row,
+            column: column
+        })
+        .then(function(res) {
+            return res.data
+        })
+    };
+
+    this.questionMarkCell = function(username, boardId, row, column) {
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/questionmark'
+        .replace('${username}', username)
+        .replace('${boardId}', boardId)
+        .replace('${row}', row)
+        .replace('${column}', column)
+        return $http.put(url, {
+            username: username,
+            boardId: boardId,
+            row: row,
+            column: column
+        })
+        .then(function(res) {
+            return res.data
+        })
+    };
+
+    this.unmarkCell = function(username, boardId, row, column) {
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/unmark'
+        .replace('${username}', username)
+        .replace('${boardId}', boardId)
+        .replace('${row}', row)
+        .replace('${column}', column)
+        return $http.put(url, {
+            username: username,
+            boardId: boardId,
+            row: row,
+            column: column
+        })
+        .then(function(res) {
+            return res.data
+        })
+    };
 
     this.getBoards = function(username) {
         return boards;
@@ -41,21 +91,6 @@ console.log(res)
 
     this.resumeBoard = function(board) {
         
-    };
-
-    this.flagCell = function(cell) {
-        cell.value = 'f';
-        return cell.board;
-    };
-
-    this.questionMarkCell = function(cell) {
-        cell.value = '?';
-        return cell.board;
-    };
-
-    this.unmarkCell = function(cell) {
-        cell.value = null;
-        return cell.board;
     };
 
 });

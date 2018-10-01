@@ -44,16 +44,13 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/questio
         .expect(200)
 
         const expected = {
-            ...user,
-            boards: user.boards.map((board, index) => ({
-                ...board,
-                id: index,
-                started: board.started.toISOString(),
-                cells: board.cells.map(row => row.map(({ display }) => ({ display }))),
-            })),
+            ...user.boards[0],
+            id: '0',
+            started: user.boards[0].started.toISOString(),
+            cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display }))),
         }
 
-        expected.boards[0].cells[row][column].display = '?'
+        expected.cells[row][column].display = '?'
 
         expect(body).to.deep.equal(expected)
 
