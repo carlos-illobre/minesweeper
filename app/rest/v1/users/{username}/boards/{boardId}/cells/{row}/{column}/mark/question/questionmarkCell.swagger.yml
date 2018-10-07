@@ -1,4 +1,4 @@
-/v1/users/{username}/boards/{boardId}/cells/{row}/{column}/questionmark:
+/v1/users/{username}/boards/{boardId}/cells/{row}/{column}/mark/question:
     put:
         tags:
             - cell

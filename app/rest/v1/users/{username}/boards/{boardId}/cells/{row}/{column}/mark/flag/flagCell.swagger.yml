@@ -1,9 +1,9 @@
-/v1/users/{username}/boards/{boardId}/cells/{row}/{column}/unmark:
+/v1/users/{username}/boards/{boardId}/cells/{row}/{column}/mark/flag:
     put:
         tags:
             - cell
-        summary: Unmark a cell
-        description: Removes the question mark or the flag from an undiscovered cell
+        summary: Put a flag in a cell
+        description: Put a flag in a cell
         parameters:
         -   name: username
             in: path
@@ -51,6 +51,6 @@
                                 properties:
                                     display:
                                         type: string
-                                        example: null
+                                        example: 'f'
             404:
                 description: Not found

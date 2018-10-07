@@ -208,7 +208,7 @@ userSchema.methods.flagCell = async function({ boardId, row, column }) {
     return this.save()
 }
 
-userSchema.methods.unmarkCell = async function({ boardId, row, column }) {
+userSchema.methods.deleteCellMark = async function({ boardId, row, column }) {
     this.setCellDisplay({ boardId, row, column, display: null })
     return this.save()
 }

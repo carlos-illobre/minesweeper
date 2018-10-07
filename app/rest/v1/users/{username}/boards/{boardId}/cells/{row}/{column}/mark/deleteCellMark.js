@@ -1,7 +1,7 @@
 const { Router } = require('express')
 
 module.exports = Router({mergeParams: true})
-.put('/v1/users/:username/boards/:boardId/cells/:row/:column/flag', async (req, res, next) => {
+.delete('/v1/users/:username/boards/:boardId/cells/:row/:column/mark', async (req, res, next) => {
 
     try {
 
@@ -13,7 +13,7 @@ module.exports = Router({mergeParams: true})
             throw error
         }
 
-        await user.flagCell(req.params)
+        await user.deleteCellMark(req.params)
 
         res.json(user.boardToJson(req.params.boardId))
 

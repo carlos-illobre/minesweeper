@@ -1,7 +1,7 @@
 const { Router } = require('express')
 
 module.exports = Router({mergeParams: true})
-.put('/v1/users/:username/boards/:boardId/cells/:row/:column/unmark', async (req, res, next) => {
+.put('/v1/users/:username/boards/:boardId/cells/:row/:column/mark/question', async (req, res, next) => {
 
     try {
 
@@ -13,7 +13,7 @@ module.exports = Router({mergeParams: true})
             throw error
         }
 
-        await user.unmarkCell(req.params)
+        await user.questionMarkCell(req.params)
 
         res.json(user.boardToJson(req.params.boardId))
 

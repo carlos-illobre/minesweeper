@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const createTestApp = require(`${process.cwd()}/test/createTestApp.js`)
 
-describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', () => {
+describe('DELETE /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/mark', () => {
 
     let testApp
 
@@ -9,7 +9,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
         testApp = await createTestApp()
     })
 
-    it('returns 200 and the board with a flag in the cell', async () => {
+    it('returns 200 and unmark a cell with a flag', async () => {
 
         const user = {
             username: 'some name',
@@ -36,11 +36,11 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
 
         await testApp.db.User.create(user)
 
-        const row = 0
+        const row = 1
         const column = 1
 
         const { body } = await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/flag`)
+        .delete(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/mark`)
         .expect(200)
 
         const expected = {
@@ -50,7 +50,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
             cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display }))),
         }
 
-        expected.cells[row][column].display = 'f'
+        expected.cells[row][column].display = null
 
         expect(body).to.deep.equal(expected)
 
@@ -87,7 +87,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
         const column = 30
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/flag`)
+        .delete(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/mark`)
         .expect(404, `The column ${column} is outside the board.`)
 
     })
@@ -123,7 +123,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
         const column = 0
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/flag`)
+        .delete(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}/mark`)
         .expect(404, 'The row -1 is outside the board.')
 
     })
@@ -160,7 +160,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
         const boardId = 10
 
         await testApp
-        .put(`/rest/v1/users/${user.username}/boards/${boardId}/cells/${row}/${column}/flag`)
+        .delete(`/rest/v1/users/${user.username}/boards/${boardId}/cells/${row}/${column}/mark`)
         .expect(404, `The user ${user.username} does not have a board ${boardId}.`)
 
     })
@@ -172,7 +172,7 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}/flag', 
         const column = 30
 
         await testApp
-        .put(`/rest/v1/users/${username}/boards/10/cells/${row}/${column}/flag`)
+        .delete(`/rest/v1/users/${username}/boards/10/cells/${row}/${column}/mark`)
         .expect(404, `User ${username} not found.`)
 
     })
