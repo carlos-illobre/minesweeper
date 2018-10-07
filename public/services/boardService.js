@@ -25,7 +25,7 @@ angular.module('minesweeper')
     }
 
     this.flagCell = function(username, boardId, row, column) {
-        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/flag'
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/mark/flag'
         .replace('${username}', username)
         .replace('${boardId}', boardId)
         .replace('${row}', row)
@@ -37,7 +37,7 @@ angular.module('minesweeper')
     };
 
     this.questionMarkCell = function(username, boardId, row, column) {
-        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/questionmark'
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/mark/question'
         .replace('${username}', username)
         .replace('${boardId}', boardId)
         .replace('${row}', row)
@@ -49,12 +49,12 @@ angular.module('minesweeper')
     };
 
     this.unmarkCell = function(username, boardId, row, column) {
-        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/unmark'
+        var url = '/rest/v1/users/${username}/boards/${boardId}/cells/${row}/${column}/mark'
         .replace('${username}', username)
         .replace('${boardId}', boardId)
         .replace('${row}', row)
         .replace('${column}', column)
-        return $http.put(url)
+        return $http.delete(url)
         .then(function(res) {
             return res.data
         })
