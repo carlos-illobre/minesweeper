@@ -6,7 +6,6 @@ const flow = require('lodash/fp/flow')
 const reduce = require('lodash/fp/reduce')
 const map = require('lodash/fp/map')
 const filter = require('lodash/fp/filter')
-const compact = require('lodash/fp/compact')
 const get = require('lodash/fp/get')
 
 const userSchema = module.exports = mongoose.Schema({
@@ -142,6 +141,10 @@ userSchema.methods.setCellDisplay = function({ boardId, row, column, display }) 
     board.cells[row].splice(0, board.cells[row].length, ...board.cells[row])
 }
 
+userSchema.methods.isCellReavealed = function({ boardId, row, column }) {
+    return !isNaN(parseInt(this.getCell({ boardId, row, column }).display))
+}
+
 userSchema.methods.revealCell = async function({ boardId, row, column }) {
 
     if (this.getCell({ boardId, row, column }).mine) {
@@ -150,19 +153,36 @@ userSchema.methods.revealCell = async function({ boardId, row, column }) {
         return
     }
 
-    const displayNearMinesInfo = ({ boardId, row, column }) => {
+    class CellsSet extends Set {
+        push(cells) {
+            cells.map(({row, column}) => super.add(`${row},${column}`))
+            return this
+        }
+        pop() {
+            const { value:cell } = super.values().next()
+            super.delete(cell)
+            const [row, column] = cell.split(',').map(value => toInteger(value))
+            return { row, column }
+        }
+    }
+
+    const cellsSet = new CellsSet().push([{ row, column }])
+
+    let nearMines
+    do {
+
+        const { row, column } = cellsSet.pop()
 
         const nearCells = flow(
-            map(([row, column]) => {
+            map(([row, column]) => ({ row, column })),
+            filter(({ row, column }) => {
                 try {
-                    return {
-                        row,
-                        column,
-                        mine: this.getCell({boardId, row, column}).mine,
-                    }
-                } catch (error) { return }
+                    return !!this.getCell({ boardId, row, column })
+                } catch (error) {
+                    return false
+                }
             }),
-            compact
+            filter(({ row, column }) => !this.isCellReavealed({ boardId, row, column })),
         )([
             [row-1, column-1],
             [row-1, column],
@@ -174,25 +194,15 @@ userSchema.methods.revealCell = async function({ boardId, row, column }) {
             [row+1, column+1],
         ])
 
-        const nearMines = sumBy(nearCells, 'mine')
+        nearMines = sumBy(nearCells, ({ row, column }) => 0 + this.getCell({ boardId, row, column }).mine)
 
         this.setCellDisplay({ boardId, row, column, display: nearMines })
 
         if (!nearMines) {
-            flow(
-                map(({ row, column }) => ({
-                    row,
-                    column,
-                    display: this.getCell({ boardId, row, column }).display,
-                })),
-                filter(({ display }) => isNaN(parseInt(display))),
-                map(({row, column}) => displayNearMinesInfo({ boardId, row, column }))
-            )(nearCells)
+            cellsSet.push(nearCells)
         }
 
-    }
-
-    displayNearMinesInfo({ boardId, row: toInteger(row), column: toInteger(column) })
+    } while(cellsSet.size)
 
     return this.save()
 

@@ -379,4 +379,53 @@ describe('PUT /v1/users/{username}/boards/{boardId}/cells/{row}/{column}', () =>
 
     })
 
+    it('returns 200 and the board with the cell revealed without a mine if the boar is 100x100 and it has 1 mine', async function() {
+
+        this.timeout(10000)
+
+        const user = {
+            username: 'some name',
+            boards: [{
+                started: new Date(),
+                time: 10,
+                cells: Array.from(
+                    Array(100), () => Array.from(
+                        Array(100), () => ({ display: null, mine: false })
+                    )
+                ),
+            }],
+        }
+
+        user.boards[0].cells[50][50].mine = true
+
+        await testApp.db.User.create(user)
+
+        const row = 1
+        const column = 0
+
+        const { body } = await testApp
+        .put(`/rest/v1/users/${user.username}/boards/0/cells/${row}/${column}`)
+        .expect(200)
+
+        const expected = {
+            ...user.boards[0],
+            id: '0',
+            started: user.boards[0].started.toISOString(),
+            cells: user.boards[0].cells.map(row => row.map(({ display }) => ({ display: '0' }))),
+        }
+
+        expected.cells[49][49].display = '1'
+        expected.cells[49][50].display = '1'
+        expected.cells[49][51].display = '1'
+        expected.cells[50][49].display = '1'
+        expected.cells[50][50].display = null
+        expected.cells[50][51].display = '1'
+        expected.cells[51][49].display = '1'
+        expected.cells[51][50].display = '1'
+        expected.cells[51][51].display = '1'
+
+        expect(body).to.deep.equal(expected)
+
+    })
+
 })

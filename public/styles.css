@@ -5,8 +5,13 @@ td {
     border-width: thin;
     text-align: center;
 }
+
 td button {
     width: 100%;
     padding: 0;
     font-weight: bolder;
+}
+
+.waiting {
+    cursor: wait;
 }

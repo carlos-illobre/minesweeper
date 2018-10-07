@@ -62,6 +62,7 @@
                                     ng-show="cell.display === null || cell.display == 'f' || cell.display == '?'"
                                     right-click="c.markCell($parent.$index, $index)"
                                     ng-click="c.discoverCell($parent.$index, $index)"
+                                    ng-class="{waiting: c.waitingForResponse}"
                             >
                                 <i ng-show="cell.display == 'f'" class="glyphicon glyphicon-flag"></i>
                                 <i ng-hide="cell.display == 'f'" class="glyphicon">{{cell.display}}</i>

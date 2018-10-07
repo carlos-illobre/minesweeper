@@ -31,33 +31,43 @@ angular.module('minesweeper')
 
     this.discoverCell = function(row, column) {
         var that = this
-        boardService.discoverCell(this.logged, this.board.id, row, column)
-        .then(function(board) {
-            that.board = board
-        })
+        if (!that.waitingForResponse) {
+            that.waitingForResponse = true
+            boardService.discoverCell(this.logged, this.board.id, row, column)
+            .then(function(board) {
+                that.board = board
+                that.waitingForResponse = false
+            })
+        }
     }
 
     this.markCell = function(row, column) {
         const display = this.board.cells[row][column].display
         const that = this
-        $scope.$apply(function () {
-            if (display === null) {
-                boardService.questionMarkCell(that.logged, that.board.id, row, column)
-                .then(function(board) {
-                    that.board = board
-                })
-            } else if (display == '?') {
-                boardService.flagCell(that.logged, that.board.id, row, column)
-                .then(function(board) {
-                    that.board = board
-                })
-            } else if (display == 'f') {
-                boardService.unmarkCell(that.logged, that.board.id, row, column)
-                .then(function(board) {
-                    that.board = board
-                })
-            }
-        })
+        if (!that.waitingForResponse) {
+            that.waitingForResponse = true
+            $scope.$apply(function () {
+                if (display === null) {
+                    boardService.flagCell(that.logged, that.board.id, row, column)
+                    .then(function(board) {
+                        that.board = board
+                        that.waitingForResponse = false
+                    })
+                } else if (display == 'f') {
+                    boardService.questionMarkCell(that.logged, that.board.id, row, column)
+                    .then(function(board) {
+                        that.board = board
+                        that.waitingForResponse = false
+                    })
+                } else if (display == '?') {
+                    boardService.unmarkCell(that.logged, that.board.id, row, column)
+                    .then(function(board) {
+                        that.board = board
+                        that.waitingForResponse = false
+                    })
+                }
+            })
+        }
     }
 
     this.preserveBoard = function() {
